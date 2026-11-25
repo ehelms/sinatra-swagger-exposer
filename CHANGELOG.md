@@ -1,3 +1,9 @@
+# 0.7.0
+
+- Add support for Sinatra 2, 3, and 4 across Rack 2 and Rack 3
+- Use Rack 3 response headers during response validation
+- Upgrade the test adapter to Rack-Test 2
+
 # 0.6.0
 
 - Fix when an html content is expected and no content type is specified

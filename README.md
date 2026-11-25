@@ -20,6 +20,10 @@ I'm adding features as I need them and it currently doesn't use all the Swagger 
 - The declarations are defined to look as ruby-ish as possible
 - Declarations are used for parameters validation and enrichment
 
+## Compatibility
+
+This release supports Sinatra `>= 2.1, < 5.0` and Ruby `>= 2.7.8`. CI exercises Sinatra 2.2, 3.2, and 4.x (Rack 2 and Rack 3).
+
 ## Usage
 
 Bring in the 'sinatra-swagger-exposer' gem from [rubygems](https://rubygems.org/gems/sinatra-swagger-exposer).

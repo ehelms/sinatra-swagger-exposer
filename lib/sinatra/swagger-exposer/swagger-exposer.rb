@@ -16,6 +16,15 @@ module Sinatra
   # Expose swagger API from your Sinatra app
   module SwaggerExposer
 
+    def self.response_headers(response)
+      response.respond_to?(:headers) ? response.headers : response.header
+    end
+
+    def self.header_value(headers, name)
+      pair = headers.find { |key, _value| key.to_s.casecmp?(name) }
+      pair&.last
+    end
+
     # Called when we register the extension
     # @param app [Sinatra::Base]
     def self.registered(app)
@@ -168,8 +177,8 @@ module Sinatra
 
     # Override Sinatra route method
     def route(verb, path, options = {}, &block)
-      no_swagger = options[:no_swagger]
-      options.delete(:no_swagger)
+      options = options.dup
+      no_swagger = options.delete(:no_swagger)
       if (verb == 'HEAD') || no_swagger
         super(verb, path, options, &block)
       else
@@ -188,11 +197,20 @@ module Sinatra
                 response_for_validation = response.dup
                 response_status = response_for_validation.shift
                 response_body = response_for_validation.pop
-                response_headers = (response_for_validation.pop || {}).merge(self.response.header)
-                response_content_type = response_headers['Content-Type']
+                response_headers = (response_for_validation.pop || {}).merge(
+                  Sinatra::SwaggerExposer.response_headers(self.response)
+                )
+                response_content_type = Sinatra::SwaggerExposer.header_value(response_headers, 'content-type')
                 request_processor.validate_response(response_body, response_content_type, response_status)
               elsif response.respond_to? :each
-                request_processor.validate_response(response.first.dup, self.response.header['Content-Type'], 200)
+                request_processor.validate_response(
+                  response.first.dup,
+                  Sinatra::SwaggerExposer.header_value(
+                    Sinatra::SwaggerExposer.response_headers(self.response),
+                    'content-type'
+                  ),
+                  200
+                )
               end
             rescue Sinatra::SwaggerExposer::SwaggerInvalidException => e
               content_type :json
