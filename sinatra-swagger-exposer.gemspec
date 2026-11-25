@@ -3,7 +3,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'sinatra/swagger-exposer/version'
 
-excluded_patterns = ['test/', 'example/', '.travis.yml', '.gitignore']
+excluded_patterns = ['test/', 'example/', '.travis.yml', '.github/', '.gitignore']
 
 Gem::Specification.new do |spec|
   spec.name = 'sinatra-swagger-exposer'

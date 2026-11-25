@@ -21,35 +21,41 @@ class TestSwaggerInfo < Minitest::Test
     end
 
     it 'must fail when a top level hash value has a wrong type' do
+      bad_contact = {:contact => []}
       must_raise_swag_and_equal(
-        -> { new_info({:contact => []}) },
-        'Property [contact] value [[]] should be a Hash for info: {:contact=>[]}'
+        -> { new_info(bad_contact) },
+        "Property [contact] value [[]] should be a Hash for info: #{bad_contact}"
       )
+      bad_contact_string = {:contact => 'plop'}
       must_raise_swag_and_equal(
-        -> { new_info({:contact => 'plop'}) },
-        'Property [contact] value [plop] should be a Hash for info: {:contact=>"plop"}'
+        -> { new_info(bad_contact_string) },
+        "Property [contact] value [plop] should be a Hash for info: #{bad_contact_string}"
       )
     end
 
     it 'must fail when a top level string value has a wrong type' do
+      bad_title_array = {:title => []}
       must_raise_swag_and_equal(
-        -> { new_info({:title => []}) },
-        'Property [title] value [[]] should be a String for info: {:title=>[]}'
+        -> { new_info(bad_title_array) },
+        "Property [title] value [[]] should be a String for info: #{bad_title_array}"
       )
+      bad_title_hash = {:title => {}}
       must_raise_swag_and_equal(
-        -> { new_info({:title => {}}) },
-        'Property [title] value [{}] should be a String for info: {:title=>{}}'
+        -> { new_info(bad_title_hash) },
+        "Property [title] value [{}] should be a String for info: #{bad_title_hash}"
       )
     end
 
     it 'must fail when a second level string value has a wrong type' do
+      bad_contact_name_array = {:contact => {:name => []}}
       must_raise_swag_and_equal(
-        -> { new_info({:contact => {:name => []}}) },
-        'Property [name] value [[]] should be a String for info: {:contact=>{:name=>[]}}'
+        -> { new_info(bad_contact_name_array) },
+        "Property [name] value [[]] should be a String for info: #{bad_contact_name_array}"
       )
+      bad_contact_name_hash = {:contact => {:name => {}}}
       must_raise_swag_and_equal(
-        -> { new_info({:contact => {:name => {}}}) },
-        'Property [name] value [{}] should be a String for info: {:contact=>{:name=>{}}}'
+        -> { new_info(bad_contact_name_hash) },
+        "Property [name] value [{}] should be a String for info: #{bad_contact_name_hash}"
       )
     end
 

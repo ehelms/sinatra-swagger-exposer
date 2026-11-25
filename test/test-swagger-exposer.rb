@@ -13,13 +13,11 @@ module Rack
 
     class Session
       def link(uri, params = {}, env = {}, &block)
-        env = env_for(uri, env.merge(:method => 'LINK', :params => params))
-        process_request(uri, env, &block)
+        custom_request('LINK', uri, params, env, &block)
       end
 
       def unlink(uri, params = {}, env = {}, &block)
-        env = env_for(uri, env.merge(:method => 'UNLINK', :params => params))
-        process_request(uri, env, &block)
+        custom_request('UNLINK', uri, params, env, &block)
       end
     end
   end
