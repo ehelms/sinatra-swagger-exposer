@@ -357,6 +357,58 @@ class TestSwaggerExposer < Minitest::Test
       last_response.body.must_equal '999'
     end
 
+    it 'supports legacy Rack response header accessors' do
+      legacy_response = Object.new
+      def legacy_response.header
+        {'Content-Type' => 'text/plain'}
+      end
+
+      Sinatra::SwaggerExposer.response_headers(legacy_response).must_equal(
+        {'Content-Type' => 'text/plain'}
+      )
+    end
+
+    it 'validates response content types using Rack 3 headers' do
+      class MySinatraApp_Rack3Headers < Sinatra::Base
+        register Sinatra::SwaggerExposer
+
+        endpoint_produces 'text/plain'
+        endpoint_response 200
+        get '/plain' do
+          content_type 'text/plain'
+          'plain'
+        end
+
+        endpoint_produces 'text/plain'
+        endpoint_response 201
+        get '/created' do
+          halt 201, {'Content-Type' => 'text/plain'}, 'created'
+        end
+      end
+
+      @my_app = MySinatraApp_Rack3Headers
+
+      get '/plain'
+      last_response.status.must_equal 200
+      last_response.body.must_equal 'plain'
+
+      get '/created'
+      last_response.status.must_equal 201
+      last_response.body.must_equal 'created'
+    end
+
+    it 'does not mutate route options when checking no_swagger' do
+      app = Class.new(Sinatra::Base) do
+        register Sinatra::SwaggerExposer
+      end
+      options = {:no_swagger => true}
+
+      app.get('/ignored', options) { 'ignored' }
+
+      options.must_equal({:no_swagger => true})
+      app.swagger_endpoints.length.must_equal 2
+    end
+
     it 'should handle fluent endpoint' do
       class MySinatraApp_RegisterFluentEndpoint < Sinatra::Base
         register Sinatra::SwaggerExposer

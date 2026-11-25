@@ -2,5 +2,5 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'ostruct'
+gem 'sinatra', ENV['SINATRA_VERSION'] if ENV['SINATRA_VERSION']
 gem 'coveralls', require: false
