@@ -53,11 +53,11 @@ class TestSwaggerRequestProcessor < Minitest::Test
       new_rp(nil, nil).useful?.must_be_nil
 
       new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new(Sinatra::SwaggerExposer::SwaggerParameterHelper::TYPE_FILE), nil).useful?.must_be_nil
-      new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new('no file'), nil).useful?.must_equal(TRUE)
+      new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new('no file'), nil).useful?.must_equal(true)
 
-      new_rp(nil, TRUE).useful?.must_equal(TRUE)
-      new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new(Sinatra::SwaggerExposer::SwaggerParameterHelper::TYPE_FILE), TRUE).useful?.must_equal(TRUE)
-      new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new('no file'), TRUE).useful?.must_equal(TRUE)
+      new_rp(nil, true).useful?.must_equal(true)
+      new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new(Sinatra::SwaggerExposer::SwaggerParameterHelper::TYPE_FILE), true).useful?.must_equal(true)
+      new_rp(FakeSwaggerEndpointResponseForTestSwaggerRequestProcessor.new('no file'), true).useful?.must_equal(true)
     end
 
     it 'should validate the response' do
